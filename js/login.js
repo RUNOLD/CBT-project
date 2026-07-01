@@ -1,6 +1,7 @@
 let userDatabase = JSON.parse(localStorage.getItem('cbtUsers'))
 let email = document.getElementById('email')
 let password = document.getElementById('password')
+let questDatabase = JSON.parse(localStorage.getItem('questionsDatabase')) || []
 function logIn() {
 
     let foundUser = userDatabase.find((u, i) => u.email === email.value.trim())

@@ -3,6 +3,7 @@ let email = document.getElementById('email')
 let password = document.getElementById('password')
 let confirmPass = document.getElementById('confirm')
 let userDatabase = JSON.parse(localStorage.getItem('cbtUsers')) ||  []
+let questDatabase = JSON.parse(localStorage.getItem('questionsDatabase')) || []
 
 function signUp(params) {
     let fullNameValue = fullName.value.trim() 
