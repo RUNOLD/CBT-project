@@ -21,7 +21,7 @@ function logIn() {
                 alert('sign in successful')
                 let foundUserIndex = userDatabase.findIndex((user, i) => user.email === email.value.trim())
                 localStorage.setItem('currentUserIndex', foundUserIndex)
-                window.location.href = './html/exam.html'
+                window.location.href = '../html/exam.html'
             }
 
             document.getElementById('loginBtn').innerHTML = 'Login & Start EXam'
