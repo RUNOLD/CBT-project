@@ -1,0 +1,594 @@
+[<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBT Exam</title>
+  <style>
+    :root{
+      --bg: #f6f8fc;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #5b667a;
+      --primary: #2563eb;
+      --primary-2: #1d4ed8;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(15,23,42,.12);
+      --shadow: 0 10px 25px rgba(15,23,42,.08);
+      --shadow-soft: 0 6px 14px rgba(15,23,42,.06);
+      --ring: 0 0 0 4px rgba(37, 99, 235, .18);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 12px;
+      --focus: #93c5fd;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(900px 450px at 10% -10%, rgba(37,99,235,.12), transparent 60%),
+                  radial-gradient(900px 450px at 95% 10%, rgba(99,102,241,.12), transparent 55%),
+                  var(--bg);
+      min-height: 100vh;
+    }
+
+    a{ color: inherit; }
+
+    .app{
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+
+    /* Header */
+    .topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+      backdrop-filter: blur(10px);
+    }
+
+    .exam-meta{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 260px;
+    }
+
+    .brand-badge{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(37,99,235,.22), rgba(29,78,216,.08));
+      border: 1px solid rgba(37,99,235,.25);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .brand-badge svg{ width: 20px; height: 20px; }
+
+    .exam-title{
+      display: grid;
+      line-height: 1.1;
+    }
+
+    .exam-title strong{
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+
+    .exam-title span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .who{
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .progress-row{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pill strong{ color: var(--text); font-weight: 700; }
+
+    .timer{
+      border-color: rgba(37,99,235,.25);
+      background: linear-gradient(180deg, rgba(37,99,235,.12), rgba(255,255,255,.92));
+    }
+
+    .timer .dot{
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      box-shadow: 0 0 0 5px rgba(37,99,235,.14);
+    }
+
+    /* Main layout */
+    .grid{
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+      margin-top: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Question card */
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header{
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(15,23,42,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,1));
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .q-badge{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(37,99,235,.22);
+      background: rgba(37,99,235,.08);
+      color: var(--primary-2);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .flag-hint{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card-body{
+      padding: 18px;
+    }
+
+    .question{
+      margin: 0 0 16px;
+      font-size: 18px;
+      letter-spacing: .1px;
+    }
+
+    /* Answer options */
+    .options{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .option{
+      position: relative;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(15,23,42,.12);
+      background: linear-gradient(180deg, rgba(246,248,252,.9), rgba(255,255,255,1));
+      box-shadow: var(--shadow-soft);
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+      overflow: hidden;
+    }
+
+    .option input{
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .option label{
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 14px;
+      cursor: pointer;
+    }
+
+    .choice{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      border: 1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.9);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--muted);
+      flex: 0 0 auto;
+      transition: background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
+    }
+
+    .opt-text{
+      padding-top: 2px;
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .option:has(input:focus-visible){
+      box-shadow: var(--shadow-soft), var(--ring);
+      border-color: rgba(37,99,235,.45);
+    }
+
+    .option:hover{
+      transform: translateY(-1px);
+      border-color: rgba(37,99,235,.35);
+    }
+
+    /* Selected state */
+    .option input:checked + label{
+      border-color: rgba(37,99,235,.42);
+      background: linear-gradient(180deg, rgba(37,99,235,.12), rgba(255,255,255,1));
+    }
+
+    .option input:checked + label .choice{
+      background: rgba(37,99,235,.12);
+      border-color: rgba(37,99,235,.4);
+      color: var(--primary-2);
+      transform: scale(1.02);
+    }
+
+    /* Flag (visual only): show if class is flagged on option wrapper */
+    .card-footer{
+      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(15,23,42,.08);
+      background: rgba(255,255,255,.98);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-row{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn{
+      appearance: none;
+      border: 1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.9);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease, opacity .15s ease;
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+    }
+
+    .btn:focus-visible{ outline: none; box-shadow: var(--ring); border-color: rgba(37,99,235,.45); }
+
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(37,99,235,.35); background: #fff; }
+
+    .btn.primary{
+      border-color: rgba(37,99,235,.35);
+      background: linear-gradient(180deg, rgba(37,99,235,.18), rgba(37,99,235,.08));
+      color: var(--primary-2);
+    }
+
+    .btn.primary:hover{ background: linear-gradient(180deg, rgba(37,99,235,.25), rgba(37,99,235,.12)); }
+
+    .btn.ghost{
+      background: rgba(255,255,255,.7);
+    }
+
+    .btn.hidden{ display: none; }
+
+    /* Navigation */
+    .nav{
+      position: sticky;
+      top: 14px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 22px rgba(15,23,42,.06);
+      overflow: hidden;
+    }
+
+    @media (max-width: 980px){
+      .nav{ position: static; }
+    }
+
+    .nav-head{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(15,23,42,.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .nav-title{
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: .2px;
+    }
+
+    .legend{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .swatch{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip{
+      width: 12px; height: 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(15,23,42,.12);
+      background: rgba(15,23,42,.04);
+    }
+
+    .chip.unanswered{ background: rgba(15,23,42,.04); }
+    .chip.answered{ background: rgba(22,163,74,.14); border-color: rgba(22,163,74,.28); }
+    .chip.current{ background: rgba(37,99,235,.16); border-color: rgba(37,99,235,.32); }
+    .chip.flagged{ background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.35); }
+
+    .nav-body{
+      padding: 14px 16px 16px;
+    }
+
+    .q-grid{
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 980px){
+      .q-grid{ grid-template-columns: repeat(8, 1fr); }
+    }
+
+    @media (max-width: 520px){
+      .q-grid{ grid-template-columns: repeat(6, 1fr); }
+    }
+
+    .q-btn{
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,.12);
+      background: rgba(255,255,255,.85);
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select: none;
+    }
+
+    .q-btn:focus-visible{ outline: none; box-shadow: var(--ring); border-color: rgba(37,99,235,.45); }
+    .q-btn:hover{ transform: translateY(-1px); border-color: rgba(37,99,235,.35); }
+
+    .q-btn.unanswered{ background: rgba(15,23,42,.03); }
+
+    .q-btn.answered{
+      color: #065f46;
+      background: rgba(22,163,74,.10);
+      border-color: rgba(22,163,74,.28);
+    }
+
+    .q-btn.current{
+      color: var(--primary-2);
+      background: rgba(37,99,235,.12);
+      border-color: rgba(37,99,235,.35);
+      box-shadow: 0 8px 18px rgba(37,99,235,.16);
+      position: relative;
+    }
+
+    .q-btn.current::after{
+      content: '';
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      background: var(--primary);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.14);
+    }
+
+    .q-btn.flagged{
+      color: #92400e;
+      background: rgba(245,158,11,.16);
+      border-color: rgba(245,158,11,.35);
+      position: relative;
+    }
+
+    .q-btn.flagged::before{
+      content: '⚑';
+      font-size: 12px;
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      opacity: .9;
+    }
+
+    /* Small utility text */
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
+    }
+    .submitExams{
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.submitExams:hover{
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(37, 99, 235, .25);
+}
+
+.submitExams:active{
+    transform: scale(.98);
+    box-shadow: none;
+}
+
+.submitExams:disabled{
+    background: #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition: none !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar" aria-label="Exam header">
+      <div class="exam-meta">
+        <div class="brand-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 7h10v10H7V7Z" stroke="currentColor" stroke-width="2" opacity=".85"/>
+            <path d="M5 9V5h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 9V5h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 15v4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 15v4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="exam-title">
+          <strong>Professional Certification CBT</strong>
+          <span>Answer carefully — one question at a time</span>
+        </div>
+      </div>
+
+      <div class="who">Candidate: <strong id="candidate" style="color:var(--text)">Your Name</strong></div>
+
+      <div class="progress-row" aria-label="Progress and timer">
+        <div class="pill" aria-label="Question progress">
+          <span>Progress</span>
+          <strong>Question 5 of 50</strong>
+        </div>
+        <div class="pill timer" aria-label="Countdown timer">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Time left:</span>
+          <strong style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">29:12</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid" aria-label="Exam content">
+      <!-- Question Card -->
+      <section class="card" aria-label="Current questions">
+        <div class="card-header">
+          <div class="q-badge">Current questions</div>
+          <div class="flag-hint">Showing 10 questions per page. Use navigation to move through the exam.</div>
+        </div>
+
+        <!-- Examples (static fallback) — can be replaced/overwritten by JavaScript -->
+         <div id="questionsContainer" class="questions-container" aria-label="Questions container">
+          <!-- displayGrid -->
+        </div>
+        
+
+
+        <div class="navigation" aria-label="Ten question navigation">
+          <div class="btn-row">
+            <button onclick="previous()" id="previousBtn" type="button" class="btn ghost">Previous 10</button>
+          </div>
+          <div class="btn-row">
+            <button onclick="next()" id="nextBtn" type="button" class="btn primary">Next 10</button>
+            <button type= "button"class="btn primary" onclick="submit()">END EXAMS</button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Question Navigation Panel -->
+     
+      <aside class="nav" aria-label="Question navigation panel">
+        <div class="nav-head">
+          <div class="nav-title">Question Navigator</div>
+          <div class="legend" aria-label="Legend">
+            <span class="swatch"><span class="chip unanswered" aria-hidden="true"></span> Unanswered</span>
+            <span class="swatch"><span class="chip answered" aria-hidden="true"></span> Answered</span>
+            <span class="swatch"><span class="chip current" aria-hidden="true"></span> Current</span>
+            <span class="swatch"><span class="chip flagged" aria-hidden="true"></span> Flagged</span>
+          </div>
+        </div>
+
+        <div class="nav-body">
+          <div class="q-grid" role="list" aria-label="Questions 1 to 50">
+        </div>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>
+<script src="../js/exam.js"></script>
+

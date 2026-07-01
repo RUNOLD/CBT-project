@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="display"></div>
+</body>
+</html>
+<script> 
+    // let display = document.getElementById('display')
+    // let array = [{
+    //     food : 'rice',
+    //     drink: 'soda',
+    // } , {
+    //     food : 'rice',
+    //     drink: 'soda',
+    // },  {
+    //     food : 'rice',
+    //     drink: 'soda',
+    // }]
+    // console.log(array);
+    
+    // function displayArr(params) {
+    //     let arr = array.map(object => ` 
+    //     ${object.food}, ${object.drink} `)
+    //     console.log(arr);
+    //     display.innerHTML += arr
+        
+    // }
+    // displayArr()
+
+    // array2 = [ [{
+    //     food : 'rice',
+    //     drink: 'soda',
+    // }], [{
+    //     food : 'rice',
+    //     drink: 'soda',
+    // } ], [
+    //     {
+    //     food : 'rice',
+    //     drink: 'soda',
+    // } ]]
+    // function displayArr2() {
+    //     array2.map((sub)=>{return sub.map((subarr)=> {return `${object.food}, ${object.drink} `})}) 
+    // }
+    // console.log(displayArr2());
+    
+
+   let userDatabase = JSON.parse(localStorage.getItem('cbtUsers'))
+let currentUserIndex = localStorage.getItem('currentUserIndex')
+let user = userDatabase[currentUserIndex]
+let questDatabase = JSON.parse(localStorage.getItem('questionsDatabase')) || []
+let displayQuestionsContainer = document.getElementById('display')
+let currentQuestionBank = 0
+let displayCand = document.getElementById('candidate')
+
+function checkUserAuth() {
+  if (!user) {
+    alert('unauthorized')
+    window.location.href = 'login.html'
+  } else {
+    displayCand.innerHTML = `${user.fullName}`
+  }
+}
+// checkUserAuth()
+let nextPrev = []
+function display() {
+  displayQuestionsContainer.innerHTML = '';
+
+
+
+  // Use a single loop and grab the 'index' to track question numbers
+  questDatabase.forEach((questions , i) => {
+    let a = `${i}`
+    
+    questions.forEach((question, index) => {
+      // Creating dynamic numbers (index starts at 0, so we add 1)
+      let questNum = `${question.id}`;
+
+      displayQuestionsContainer.innerHTML += `
+      <div class="q-card-example" aria-label="Question ${questNum}">
+  <div class="q-header-container">
+    <span class="q-card-number">Q${questNum}.</span>
+    <h2 class="q-card-text">${question.question}</h2>
+  </div>
+  
+  <div class="options" role="radiogroup" aria-label="Question ${questNum} options">
+    <div class="option">
+      <input type="radio" id="q${questNum}-a" name="question-${questNum}" />
+      <label for="q${questNum}-a"><span class="choice" aria-hidden="true">A</span>${question.optionsA}</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="q${questNum}-b" name="question-${questNum}" />
+      <label for="q${questNum}-b"><span class="choice" aria-hidden="true">B</span>${question.optionsB}</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="q${questNum}-c" name="question-${questNum}" />
+      <label for="q${questNum}-c"><span class="choice" aria-hidden="true">C</span>${question.optionsC}</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="q${questNum}-d" name="question-${questNum}" />
+      <label for="q${questNum}-d"><span class="choice" aria-hidden="true">D</span>${question.optionsD}</label>
+    </div>
+  </div>
+</div>`
+
+
+  });
+  });
+}
+function next() {
+  currentQuestionBank++
+ 
+}
+console.log(next());
+
+display()
+</script>
+<script src ="../js/database.js"></script>
+
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+let question1 = document.getElementById('question1')
+ let javascriptAnswQues1 = 'hypertext markup language'
+function option(){
+  if (optionA.checked.value === javascriptAnswQues1){
+    mark as correct
+    else{
+      mark as wrong
+  }
+}

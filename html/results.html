@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBT Results</title>
+  <style>
+    :root{
+      --bg: #f6f8fc;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #5b667a;
+      --primary: #2563eb;
+      --primary-2: #1d4ed8;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: rgba(15,23,42,.12);
+      --shadow: 0 10px 25px rgba(15,23,42,.08);
+      --shadow-soft: 0 6px 14px rgba(15,23,42,.06);
+      --ring: 0 0 0 4px rgba(37, 99, 235, .18);
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 12px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(900px 450px at 10% -10%, rgba(37,99,235,.12), transparent 60%),
+                  radial-gradient(900px 450px at 95% 10%, rgba(99,102,241,.12), transparent 55%),
+                  var(--bg);
+      min-height: 100vh;
+    }
+
+    .app{
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 28px;
+    }
+
+    .topbar{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-badge{
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(37,99,235,.22), rgba(29,78,216,.08));
+      border: 1px solid rgba(37,99,235,.25);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .exam-title{
+      display: grid;
+      line-height: 1.1;
+    }
+
+    .exam-title strong{ font-size: 14px; letter-spacing: .2px; }
+    .exam-title span{ font-size: 12px; color: var(--muted); }
+
+    .who{
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .hero{
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .panel .panel-head{
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(15,23,42,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,1));
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel .panel-head h2{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .1px;
+    }
+
+    .score-big{
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .score-row{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .score-row .label{ color: var(--muted); font-weight: 700; }
+    .score-row .value{ font-size: 36px; font-weight: 1000; color: var(--primary-2); }
+
+    .score-meta{ display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.9);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill strong{ color: var(--text); font-weight: 800; }
+
+    .btn{
+      appearance: none;
+      border: 1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.9);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease, box-shadow .15s ease;
+      box-shadow: 0 1px 0 rgba(15,23,42,.04);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:focus{ outline: none; box-shadow: var(--ring); border-color: rgba(37,99,235,.45); }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(37,99,235,.35); background: #fff; }
+
+    .btn.primary{
+      border-color: rgba(37,99,235,.35);
+      background: linear-gradient(180deg, rgba(37,99,235,.18), rgba(37,99,235,.08));
+      color: var(--primary-2);
+    }
+
+    .btn-row{ padding: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .list{
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px){
+      .list{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .card-head{
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(15,23,42,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,1));
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .q-label{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 950;
+    }
+
+    .badge{
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,23,42,.12);
+      font-weight: 900;
+      font-size: 12.5px;
+      color: var(--text);
+      background: rgba(255,255,255,.9);
+      white-space: nowrap;
+    }
+
+    .badge.correct{ color: #065f46; background: rgba(22,163,74,.10); border-color: rgba(22,163,74,.28); }
+    .badge.wrong{ color: #7f1d1d; background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.28); }
+    .badge.unanswered{ color: #92400e; background: rgba(245,158,11,.14); border-color: rgba(245,158,11,.32); }
+
+    .card-body{ padding: 16px 18px; }
+
+    .question-text{ margin: 0 0 12px; font-size: 18px; letter-spacing: .1px; }
+
+    .kv{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .kv .row{
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 12px;
+      border: 1px solid rgba(15,23,42,.08);
+      border-radius: var(--radius-md);
+      background: rgba(246,248,252,.8);
+    }
+
+    @media (max-width: 520px){
+      .kv .row{ grid-template-columns: 1fr; }
+    }
+
+    .kv .k{ color: var(--muted); font-weight: 800; font-size: 13px; }
+    .kv .v{ font-weight: 800; }
+
+    .options-line{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: .1px;
+    }
+
+    .side{
+      position: sticky;
+      top: 14px;
+      padding: 14px;
+    }
+
+    @media (max-width: 980px){
+      .side{ position: static; }
+    }
+
+    .side h3{ margin: 0 0 10px; font-size: 14px; letter-spacing: .2px; }
+
+    .mini-grid{
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mini{
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,.92);
+      padding: 12px;
+      box-shadow: 0 6px 14px rgba(15,23,42,.05);
+    }
+
+    .mini .n{ font-size: 22px; font-weight: 1000; color: var(--primary-2); }
+    .mini .t{ color: var(--muted); font-weight: 800; font-size: 13px; margin-top: 4px; }
+
+    .empty{
+      padding: 26px 18px;
+      color: var(--muted);
+      font-weight: 800;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar" aria-label="Results header">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="brand-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:20px;">
+            <path d="M7 7h10v10H7V7Z" stroke="currentColor" stroke-width="2" opacity=".85"/>
+            <path d="M5 9V5h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 9V5h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M5 15v4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 15v4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="exam-title">
+          <strong>Professional Certification CBT</strong>
+          <span>Results</span>
+        </div>
+      </div>
+
+      <div class="who">Candidate: <strong id="candidate" style="color:var(--text)">Your Name</strong></div>
+    </header>
+
+    <section class="hero">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Score Summary</h2>
+          <span class="pill" style="margin:0;">
+            <span style="color:var(--muted);font-weight:800;">Status:</span>
+            <strong id="attemptStatus">—</strong>
+          </span>
+        </div>
+        <div class="score-big">
+          <div class="score-row">
+            <div class="label">Your Score</div>
+            <div class="value" id="scoreValue">0</div>
+          </div>
+          <div class="score-meta">
+            <div class="pill"><span>Correct</span> <strong id="correctCount">0</strong></div>
+            <div class="pill"><span>Wrong</span> <strong id="wrongCount">0</strong></div>
+            <div class="pill"><span>Unanswered</span> <strong id="unansweredCount">0</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Actions</h2>
+          <span style="color:var(--muted);font-size:12px;font-weight:800;">After reviewing results</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn" href="exam.html">Back to Exam</a>
+          <a class="btn primary" href="login.html" onclick="localStorage.removeItem('selectedAnswers'); localStorage.removeItem('userScore');">Logout</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="list" aria-label="Results list">
+      <div>
+        <div id="resultsContainer">
+          <!-- rendered by js/result.js -->
+        </div>
+      </div>
+
+      <aside class="panel side" aria-label="Results side summary">
+        <h3>Quick Breakdown</h3>
+        <div class="mini-grid">
+          <div class="mini">
+            <div class="n" id="totalCount">0</div>
+            <div class="t">Total Questions</div>
+          </div>
+          <div class="mini">
+            <div class="n" id="percentValue">0%</div>
+            <div class="t">Accuracy</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+  </div>
+
+  <script src="../js/result.js"></script>
+</body>
+</html>
+
