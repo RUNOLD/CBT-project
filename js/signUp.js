@@ -38,7 +38,7 @@ function signUp(params) {
       document.getElementById('signupBtn').innerHTML = 'Create Account'
         document.getElementById('signupBtn').disabled = false
       
-      window.location.href = './login.html'
+      window.location.href = './html/login.html'
        }, 3000);
 
    
